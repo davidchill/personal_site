@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/*
+ * Custom theme — override these to change the site's look.
+ * Tailwind v4 uses CSS custom properties via @theme instead of a config file.
+ */
+@theme {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-accent: #f59e0b;
+  --color-surface: #0f172a;
+  --color-surface-light: #1e293b;
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}

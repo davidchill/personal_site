@@ -1,0 +1,70 @@
+---
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "David Rodriguez — Developer" } = Astro.props;
+
+// Analytics flags — set these in your .env or hosting provider
+const enablePlausible = import.meta.env.PUBLIC_ENABLE_PLAUSIBLE === "true";
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN ?? "";
+const enableGA = import.meta.env.PUBLIC_ENABLE_GA === "true";
+const gaId = import.meta.env.PUBLIC_GA_ID ?? "";
+const enableVercelAnalytics = import.meta.env.PUBLIC_ENABLE_VERCEL_ANALYTICS === "true";
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+
+    <!-- Google Fonts — Inter + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Plausible Analytics (privacy-friendly) -->
+    {enablePlausible && (
+      <script
+        defer
+        data-domain={plausibleDomain}
+        src="https://plausible.io/js/script.js"
+      />
+    )}
+
+    <!-- Google Analytics -->
+    {enableGA && gaId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+        <script define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag("js", new Date());
+          gtag("config", gaId);
+        </script>
+      </>
+    )}
+  </head>
+  <body class="bg-surface text-text font-sans antialiased">
+    <slot />
+
+    <!-- Vercel Analytics (loaded as React island so it only hydrates when needed) -->
+    {enableVercelAnalytics && (
+      <script>
+        import { inject } from "@vercel/analytics";
+        inject();
+      </script>
+    )}
+  </body>
+</html>
